@@ -1,0 +1,2 @@
+httpServerPort: 3000
+amqUrl: 'amqp://127.0.0.1:5672'

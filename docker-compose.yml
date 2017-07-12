@@ -1,0 +1,19 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:9.6.3-alpine'
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'windbreaker'
+    ports:
+      - '5432:5432'
+  rediscluster:
+    image: 'grokzen/redis-cluster'
+    ports:
+      - "7000"
+      - "7001"
+  rabbitmq:
+    image: 'rabbitmq:3.6.10-alpine'
+    ports:
+      - '5672:5672'

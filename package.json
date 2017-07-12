@@ -1,0 +1,45 @@
+{
+  "name": "windbreaker-server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "docker:build": "docker-compose build",
+    "docker:start": "docker-compose up rediscluster rabbitmq",
+    "docker:stop": "docker-compose down",
+    "lint": "eslint .",
+    "test": "npm run docker:build && docker-compose run test && docker-compose down",
+    "test:unit": "nyc ava test/unit",
+    "test:integration": "docker-compose run test npm run test:docker:integration",
+    "test:docker:ci": "npm run lint && nyc ava test/unit test/integration --verbose",
+    "test:docker:integration": "nyc ava test/unit test/integration --verbose",
+    "start": "browser-refresh src/server.js",
+    "cluster:start": "browser-refresh src/cluster.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "custom-logger": "^0.3.1",
+    "js-yaml": "^3.8.4",
+    "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-path-router": "^0.1.0",
+    "require-self-ref": "^2.0.1",
+    "task-list": "^1.0.5",
+    "uuid": "^3.0.1",
+    "windbreaker-service-util": "github:windbreaker-io/windbreaker-service-util"
+  },
+  "devDependencies": {
+    "ava": "^0.20.0",
+    "browser-refresh": "^1.6.0",
+    "eslint": "^4.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "git-hooks": "^1.1.8",
+    "nyc": "^11.0.2",
+    "sinon": "^2.3.5"
+  }
+}
