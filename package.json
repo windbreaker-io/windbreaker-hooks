@@ -24,6 +24,7 @@
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-path-router": "^0.1.0",
+    "n-level-cache": "^1.0.3",
     "require-self-ref": "^2.0.1",
     "task-list": "^1.0.5",
     "uuid": "^3.0.1",

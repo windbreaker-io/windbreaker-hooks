@@ -1,32 +1,28 @@
 const { createCache } = require('windbreaker-service-util/cache')
 const logger = require('~/src/logging').logger(module)
-const Webhook = require('~/src/models/Webhook')
+const config = require('~/src/config')
 
 const CONNECTION_OPTIONS = {
-  nodes: [
-    { host: 'rediscluster' }
-  ],
+  nodes: config.getRedisClusterNodes(),
   logger,
   maxDelay: 1000
 }
 
 let cache
 
-exports.initialize = async function () {
-  cache = await createCache(CONNECTION_OPTIONS)
+exports.createCache = async function () {
+  logger.info('Attempting to connect to Redis Cluster Nodes')
+  cache = exports.cache = await createCache(CONNECTION_OPTIONS)
 }
 
 exports.close = async function () {
-  // TODO
+  return cache.close()
 }
 
-exports.getWebhook = async function (key) {
-  let result
+exports.getEntity = async function (key, ModelType) {
+  return cache.getEntity(key, ModelType)
+}
 
-  try {
-    result = await cache.getEntity(key, Webhook)
-  } catch (err) {
-    logger.error(`Error while fetching key "${key}"`, err)
-  }
-  return result
+exports.setEntity = async function (key, value, ttl) {
+  return cache.setEntity(key, value, ttl)
 }

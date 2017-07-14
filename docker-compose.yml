@@ -11,8 +11,8 @@ services:
   rediscluster:
     image: 'grokzen/redis-cluster'
     ports:
-      - "7000"
-      - "7001"
+      - "7000:7000"
+      - "7001:7001"
   rabbitmq:
     image: 'rabbitmq:3.6.10-alpine'
     ports:

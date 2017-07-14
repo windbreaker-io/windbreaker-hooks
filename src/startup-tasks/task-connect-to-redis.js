@@ -1,8 +1,8 @@
 module.exports = {
   start () {
-    return require('../cache').initialize()
+    return require('../cache').createCache()
   },
   stop () {
-    require('../cache').close()
+    return require('../cache').close()
   }
 }
