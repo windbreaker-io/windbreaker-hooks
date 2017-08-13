@@ -8,7 +8,7 @@ redisClusterNodes:
 knex:
   client: 'pg'
   connection:
-    host: 'postgres'
+    host: '127.0.0.1'
     user: 'postgres'
     password: 'postgres'
     database: 'windbreaker'

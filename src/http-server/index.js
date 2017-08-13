@@ -19,13 +19,6 @@ exports.create = function () {
   //
   // app.use(router.getRequestHandler())
 
-  // router.post('/github/:id', koaBody,
-  //     (ctx) => {
-  //       console.log(ctx.request.body)
-  //       ctx.body = 'Hello'
-  //     }
-  // )
-
   routes.register(app, router)
 
   app.use(router.routes())

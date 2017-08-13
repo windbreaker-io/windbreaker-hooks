@@ -22,6 +22,11 @@ exports.migrate = function () {
   })
 }
 
+exports.isValidWebhook = async function (id, type) {
+  const webhook = await daoHelper.findById(id)
+  return webhook != null && webhook.getType().name() === type
+}
+
 exports.close = async function () {
   return daoHelper.close()
 }
