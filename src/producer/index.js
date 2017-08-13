@@ -1,7 +1,9 @@
 const tri = require('tri')
+const asyncQueue = require('queue')
 const config = require('~/src/config')
 const logger = require('~/src/logging').logger(module)
 const queue = require('windbreaker-service-util/queue')
+const Event = require('windbreaker-service-util/models/events/Event')
 
 const AMQ_URL = config.getAmqUrl()
 const WEBHOOKS_EVENTS_QUEUE_NAME = config.getWebhookEventsQueueName()
@@ -14,6 +16,17 @@ const CONNECT_PRODUCER_ATTEMPT_OPTIONS = {
   logger
 }
 
+async function _sendMessage (event) {
+  try {
+    logger.info('Attempting to send message')
+    await producer.sendMessage(event)
+    logger.info('Successfully sent message')
+  } catch (err) {
+    logger.error(`Failed to send message "${event}" to queue name "${WEBHOOKS_EVENTS_QUEUE_NAME}"`, err)
+  }
+}
+
+let eventQueue = asyncQueue()
 let producer
 
 async function startProducer (attempts) {
@@ -40,28 +53,73 @@ exports.initialize = async function () {
 
   logger.info('Sucessfully started webhook event producer!')
 
-  producer.on('error', (err) => {
+  producer.on('error', async function (err) {
     logger.error(`Producer error: `, err)
 
-    // TODO: Write test to ensure that this bubbles up to an uncaught exception
+    try {
+      await startProducer()
+    } catch (err) {
+      // TODO: Write test to ensure that this bubbles up to an uncaught exception
+      logger.error('Error attempting to reconnect producer: ', err)
+      throw err
+    }
 
-    startProducer()
-      // .then(() => {
-      // TODO: Handle all messages in async queue here  
-      // })
-      .catch((err) => {
-        logger.error('Error attempting to reconnect producer: ', err)
-        throw err
+    // Check whether there are pending jobs to be executed in the queue. This
+    // will only happen if the producer was restarted and there were messages
+    // that needed to be sent while it was down
+    if (!eventQueue.length) {
+      return
+    }
+
+    try {
+      await new Promise(function (resolve, reject) {
+        eventQueue.start(function (err) {
+          return err ? reject(err) : resolve()
+        })
       })
+    } catch (err) {
+      eventQueue.end()
+      logger.error('Error while executing jobs in the queue', err)
+    }
   })
 }
 
 exports.sendMessage = async function (message) {
-  // TODO: If the producer is falsy, add the message  to an async queue
-  // and handle it when the producer is back online
+  const typeName = message.Model.typeName
+  let errors = []
+
+  const event = Event.wrap({
+    type: typeName,
+    data: message.clean()
+  }, errors)
+
+  if (errors.length) {
+    logger.error(`Could not wrap event to send. Errors: "${errors.join(',')}"`)
+    return
+  }
+
+  // If the producer is falsy, it is currently offline. We should add messages
+  // to an async queue and handle when it's back online
+  if (!producer) {
+    eventQueue.push(async function (callback) {
+      try {
+        await _sendMessage(event)
+      } catch (err) {
+        logger.error(`Failed to send message "${event.stringify()}" on async queue`, err)
+      }
+
+      // Do not report errors. If the message failed to send, we've already retried
+      // multiple times. We should just give up.
+      callback()
+    })
+    return
+  }
+
   try {
-    await producer.sendMessage(message)
+    logger.info('Attempting to send message')
+    await producer.sendMessage(event)
+    logger.info('Successfully sent message')
   } catch (err) {
-    logger.error(`Failed to send message "${message}" to queue name "${WEBHOOKS_EVENTS_QUEUE_NAME}"`, err)
+    logger.error(`Failed to send message "${event}" to queue name "${WEBHOOKS_EVENTS_QUEUE_NAME}"`, err)
   }
 }

@@ -17,6 +17,10 @@ module.exports = BaseConfig.extend({
       default: 'amqp://127.0.0.1:5672'
     },
     knex: KnexConfig,
+    webhookMigrationsTableName: {
+      description: 'The database table name for running migrations',
+      default: 'webhook_migrations'
+    },
     redisClusterNodes: [RedisClusterNodeConfig],
     webhookEventsQueueName: {
       description: 'The name of the queue in which webhook events are published on',
