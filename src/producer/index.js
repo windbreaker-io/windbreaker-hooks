@@ -123,3 +123,7 @@ exports.sendMessage = async function (message) {
     logger.error(`Failed to send message "${event}" to queue name "${WEBHOOKS_EVENTS_QUEUE_NAME}"`, err)
   }
 }
+
+exports.stop = async function () {
+  await producer.stop()
+}

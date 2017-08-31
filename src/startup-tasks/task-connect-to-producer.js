@@ -3,6 +3,6 @@ module.exports = {
     return require('../producer').initialize()
   },
   stop () {
-    require('../producer').close()
+    require('../producer').stop()
   }
 }

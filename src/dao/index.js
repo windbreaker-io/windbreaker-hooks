@@ -49,5 +49,5 @@ exports.isValidWebhook = async function (id, type) {
 }
 
 exports.close = async function () {
-  return daoHelper.close()
+  return daoHelper.destroy()
 }

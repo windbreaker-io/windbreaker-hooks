@@ -2,6 +2,8 @@ const Koa = require('koa')
 // const Router = require('koa-path-router')
 const router = require('koa-router')()
 
+let server
+
 exports.create = function () {
   const config = require('~/src/config')
   const routes = require('./routes')
@@ -25,7 +27,11 @@ exports.create = function () {
   app.use(router.allowedMethods())
 
   // TODO: Use koa-sslify to add certs
-  app.listen(config.getHttpServerPort())
+  server = app.listen(config.getHttpServerPort())
 
   console.log('Starting on port: ', config.getHttpServerPort())
+}
+
+exports.close = function () {
+  server.close()
 }

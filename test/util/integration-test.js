@@ -1,5 +1,6 @@
 const server = require('~/src/server')
 const getPortSync = require('get-port-sync')
+const startupTasks = require('~/src/startup-tasks')
 
 exports.register = function ({ test, context }) {
   let httpServerPort
@@ -21,6 +22,6 @@ exports.register = function ({ test, context }) {
   })
 
   test.after(async () => {
-    // TODO: Gracefully shutdown the server and end startup tasks
+    await startupTasks.stopAll()
   })
 }
