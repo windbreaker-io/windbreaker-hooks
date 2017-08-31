@@ -17,6 +17,13 @@
   },
   "author": "",
   "license": "MIT",
+  "config": {
+    "branchNameCommitModifier": {
+      "preChar": "[",
+      "postChar": "]",
+      "projectName": "WB"
+    }
+  },
   "dependencies": {
     "custom-logger": "^0.3.1",
     "fashion-model-defaults": "^1.0.2",
