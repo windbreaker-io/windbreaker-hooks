@@ -2,22 +2,24 @@
   "name": "windbreaker-server",
   "version": "0.0.1",
   "description": "",
-  "main": "src/server.js",
+  "main": "src/run-server.js",
   "scripts": {
     "lint": "eslint .",
     "docker:start": "docker-compose up -d",
     "docker:stop": "docker-compose down",
     "pretest": "npm run lint",
-    "test": "npm run docker:start && sleep 10 && . ./init-environment.sh && nyc ava test/unit test/integration; npm run docker:stop",
+    "migrate:local": "knex migrate:latest --env localhost --knexfile ./src/dao/knexfile.js",
+    "test": "npm run docker:start && sleep 10 && . ./init-environment.sh && npm run migrate:local && nyc ava test/unit/**/*-test.js test/integration/**/*-test.js; npm run docker:stop",
     "test:unit": "nyc ava test/unit",
-    "test:integration": "npm run docker:start && sleep 10 && . ./init-environment.sh && nyc ava test/integration; npm run docker:stop",
-    "start": ". ./init-environment.sh && browser-refresh src/server.js",
+    "test:integration": "npm run docker:start && sleep 10 && . ./init-environment.sh && npm run migrate:local && nyc ava test/integration; npm run docker:stop",
+    "start": ". ./init-environment.sh && browser-refresh src/run-server.js",
     "cluster:start": ". ./init-environment.sh && browser-refresh src/cluster.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "custom-logger": "^0.3.1",
+    "fashion-model-defaults": "^1.0.2",
     "js-yaml": "^3.9.1",
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
@@ -42,6 +44,8 @@
     "eslint-plugin-standard": "^3.0.1",
     "git-hooks": "^1.1.8",
     "nyc": "^11.1.0",
-    "sinon": "^2.4.1"
+    "porti": "^1.0.3",
+    "sinon": "^2.4.1",
+    "superagent": "^3.5.2"
   }
 }

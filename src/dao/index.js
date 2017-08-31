@@ -1,4 +1,5 @@
 const path = require('path')
+const uuid = require('uuid')
 const Webhook = require('~/src/models/Webhook')
 const config = require('~/src/config')
 const logger = require('~/src/logging').logger(module)
@@ -14,7 +15,7 @@ exports.createDao = function () {
   })
 }
 
-exports.migrate = function () {
+exports.migrate = async function () {
   logger.info('Attempting to run database migrations...')
   return daoHelper.getKnex().migrate.latest({
     tableName: config.getWebhookMigrationsTableName(),
@@ -22,9 +23,29 @@ exports.migrate = function () {
   })
 }
 
+/**
+* Create a new webhook record in the database
+* @param type {WebhookType} - Type of webhook to create
+*/
+exports.insert = async function (type) {
+  const id = uuid.v4()
+  return daoHelper.insert({ id, type })
+}
+
+/**
+* Validate whether a webhook with a specific ID exists
+*
+* @param id {String} - UUID of the webhook passed in the path of the request
+* @param type {WebhookType} - Type of webhook associated with this request
+*/
 exports.isValidWebhook = async function (id, type) {
-  const webhook = await daoHelper.findById(id)
-  return webhook != null && webhook.getType().name() === type
+  try {
+    const webhook = await daoHelper.findById(id)
+    return webhook != null && webhook.getType() === type
+  } catch (err) {
+    logger.error(`Error validating webhook with id "${id}"`, err)
+    return false
+  }
 }
 
 exports.close = async function () {

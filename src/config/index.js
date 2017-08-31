@@ -1,17 +1,28 @@
-const fs = require('fs')
+const configUtil = require('windbreaker-service-util/config')
 const path = require('path')
-const yml = require('js-yaml')
-const registerConfig = require('windbreaker-service-util/config')
-const BaseServiceConfig = require('windbreaker-service-util/models/BaseServiceConfig')
-const Config = require('~/src/models/HooksServiceConfig')
 
-let config = module.exports = new Config()
+const HooksServiceConfig = require('~/src/models/HooksServiceConfig')
+const config = module.exports = new HooksServiceConfig()
 
-const currentEnvironment = BaseServiceConfig.getServiceEnvironment() || 'development'
-const configFilePath = path.resolve(__dirname, `config.${currentEnvironment}.yml`)
-const configFile = yml.safeLoad(fs.readFileSync(configFilePath))
+const configDirectoryPath = path.join(__dirname, '../../config')
 
-registerConfig(config, [
-  // TODO: Add config from process.argv
-  configFile
-])
+function applyConfigOptions (configOps) {
+  for (const configOp in configOps) {
+    const value = configOps[configOp]
+    config.set(configOp, value)
+  }
+}
+
+module.exports.load = async (configOps) => {
+  if (configOps) {
+    applyConfigOptions(configOps)
+  }
+  await configUtil.load({ config, path: configDirectoryPath })
+}
+
+module.exports.loadSync = (configOps) => {
+  if (configOps) {
+    applyConfigOptions(configOps)
+  }
+  configUtil.loadSync({ config, path: configDirectoryPath })
+}

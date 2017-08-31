@@ -1,31 +1,29 @@
 require('require-self-ref')
 
-require('~/src/config').load()
+exports.start = async function (configOps) {
+  const config = require('~/src/config')
+  const startupTasks = require('~/src/startup-tasks')
 
-const startupTasks = require('~/src/startup-tasks')
-
-;(async function () {
   try {
+    await config.load(configOps)
+    require('~/src/logging').logger(module)
+
     await startupTasks.startAll()
 
-    const logger = require('~/src/logging').logger(module)
-    const config = require('~/src/config')
-
-    logger.info(`Started all tasks in environment ${config.getEnvironment().name()}`)
+    // notify browser refresh
+    if (process.send) {
+      process.send('online')
+    }
   } catch (err) {
-    console.log('Failed to start server: ', err)
-    return process.exit(1)
+    console.error('Error occurred while performing startup tasks', err)
+    process.exit(1)
   }
-})()
 
-process.on('uncaughtException', function (err) {
-  // TODO: Log this to a database
-  console.error('Uncaught exception: ', err)
-  process.exit(1)
-})
+  process.on('uncaughtException', (err) => {
+    console.error('UncaughtException', err)
+  })
 
-process.on('unhandledException', function (err) {
-  // TODO: Log this to a database
-  console.error('Unhandled exception', err)
-  process.exit(1)
-})
+  process.on('unhandledException', (err) => {
+    console.error('UnhandledException', err)
+  })
+}
