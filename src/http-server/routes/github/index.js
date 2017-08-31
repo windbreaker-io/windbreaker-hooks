@@ -33,7 +33,6 @@ module.exports = {
     if (!isValidWebhook) {
       logger.error(`Invalid webhook id "${id}" received in request`)
       ctx.throw(400, `Invalid webhook id "${id}" received in request`)
-      return
     }
 
     const event = ctx.request.header[EVENT_HEADER]
@@ -43,7 +42,6 @@ module.exports = {
     if (!event) {
       logger.error('Missing event header in GitHub webhook')
       ctx.throw(400, 'Missing event header')
-      return
     }
 
     const ModelType = eventToModelType[event]
@@ -51,7 +49,6 @@ module.exports = {
     if (!ModelType) {
       logger.error(`Invalid event header ${event}`)
       ctx.throw(400, 'Invalid event header')
-      return
     }
 
     let errors = []
@@ -60,7 +57,6 @@ module.exports = {
     if (errors.length) {
       logger.error(`Invalid event body "${webhookEvent.stringify()}". Errors: "${errors.join(',')}"`)
       ctx.throw(400, 'Invalid event body')
-      return
     }
 
     await producer.sendMessage(webhookEvent)

@@ -25,7 +25,6 @@
     }
   },
   "dependencies": {
-    "custom-logger": "^0.3.1",
     "fashion-model-defaults": "^1.0.2",
     "js-yaml": "^3.9.1",
     "koa": "^2.3.0",
