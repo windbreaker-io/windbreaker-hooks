@@ -1,4 +1,4 @@
-exports.description = 'should handle valid push payload'
+exports.description = 'should receive 400 error for invalid x-github-event'
 exports.type = 'GITHUB'
 exports.expectError = true
 
