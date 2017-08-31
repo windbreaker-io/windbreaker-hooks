@@ -1,4 +1,5 @@
 const GithubPush = require('windbreaker-service-util/models/events/webhook/github/GithubPush')
+const WebhookType = require('~/src/models/WebhookType')
 const dao = require('~/src/dao')
 const logger = require('~/src/logging').logger(module)
 const producer = require('~/src/producer')
@@ -12,7 +13,7 @@ const EVENT_HEADER = 'x-github-event'
 
 async function _isValidWebhook (id) {
   try {
-    let result = await dao.isValidWebhook(id)
+    let result = await dao.isValidWebhook(id, WebhookType.GITHUB)
     return result
   } catch (err) {
     logger.error(`Error validating webhook with id "${id}"`)
@@ -63,5 +64,7 @@ module.exports = {
     }
 
     await producer.sendMessage(webhookEvent)
+
+    ctx.body = {}
   }
 }

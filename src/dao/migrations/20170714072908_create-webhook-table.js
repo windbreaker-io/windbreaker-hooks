@@ -9,7 +9,7 @@ exports.up = function (knex, Promise) {
 
   return knex
     .schema
-    .createTableIfNotExists(WEBHOOK_TABLE_NAME + require('uuid').v4(), (table) => {
+    .createTableIfNotExists(WEBHOOK_TABLE_NAME, (table) => {
       // TODO: Add more as more properties are added
       // to the Webhook model
       table.string('id').primary()

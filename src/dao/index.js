@@ -27,8 +27,8 @@ exports.migrate = async function () {
 * Create a new webhook record in the database
 * @param type {WebhookType} - Type of webhook to create
 */
-exports.insert = async function (type) {
-  const id = uuid.v4()
+exports.insert = async function (id, type) {
+  id = id || uuid.v4()
   return daoHelper.insert({ id, type })
 }
 

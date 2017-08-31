@@ -12,6 +12,4 @@ exported[environment] = Object.assign(config.getKnex().clean(), {
   }
 })
 
-console.log(exported)
-
 module.exports = exported
