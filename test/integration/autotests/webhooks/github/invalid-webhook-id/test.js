@@ -6,7 +6,7 @@ const type = exports.type = 'GITHUB'
 
 exports.request = function ({ request, id, httpServerPort, endpoint, payload }) {
   return request
-    .post(buildEndpoint('INVALID-ID', type, httpServerPort))
+    .post(buildEndpoint({ id: 'INVALID-ID', type, httpServerPort }))
     .set('x-github-event', 'push')
     .send(payload)
 }

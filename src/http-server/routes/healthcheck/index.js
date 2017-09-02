@@ -1,7 +1,8 @@
 module.exports = {
   method: 'GET',
-  path: '/healthcheck/:id',
+  path: '/healthcheck',
   async handler (ctx) {
-    ctx.body = 'Okay!'
+    // TODO: Add more healthchecks
+    ctx.body = {}
   }
 }

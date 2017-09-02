@@ -1,3 +1,9 @@
-module.exports = function buildEndpoint (id, type, httpServerPort) {
-  return `:${httpServerPort}/${type.toLowerCase()}/${id}`
+module.exports = function buildEndpoint ({ id, type, httpServerPort }) {
+  let endpoint = `:${httpServerPort}/${type.toLowerCase()}`
+
+  if (id) {
+    endpoint += `/${id}`
+  }
+
+  return endpoint
 }
