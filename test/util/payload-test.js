@@ -5,37 +5,42 @@ const uuid = require('uuid')
 const dao = require('~/src/dao')
 const buildEndpoint = require('~/test/util/buildEndpoint')
 
-exports.register = function ({ test, dir, webhook, context }) {
-  const files = fs.readdirSync(dir)
+async function webhookBeforeEach (testFile, t) {
+  const id = uuid.v4()
+  t.context = { id }
+  await dao.insert(id, testFile.type)
+}
 
-  files.forEach(file => {
-    let payload
+async function webhookAfterEach (testFile, t) {
+  const { id } = t.context
+
+  try {
+    await dao.deleteById(id)
+  } catch (err) {
+    // If an error is expected, ignore if the delete fails
+    if (testFile.expectError !== true) {
+      console.log('EXPECTED ERR THROW: ', testFile)
+      throw err
+    }
+  }
+}
+
+function buildTest ({ testFile, context, dir, file, webhook }) {
+  let payload
+  try {
+    payload = require(path.join(dir, file, 'payload.json'))
+  } catch (err) {
+    payload = {}
+  }
+
+  const expectError = testFile.expectError
+
+  return async (t) => {
     try {
-      payload = require(path.join(dir, file, 'payload.json'))
-    } catch (err) {
-      payload = {}
-    }
+      if (webhook) {
+        await webhookBeforeEach(testFile, t)
+      }
 
-    const testFile = require(path.join(dir, file, 'test.js'))
-
-    let testDescription = `payload test "${file}"`
-
-    if (testFile.description) {
-      testDescription += ` - ${testFile.description}`
-    }
-
-    if (webhook) {
-      test.beforeEach(async (t) => {
-        const id = uuid.v4()
-        t.context = { id }
-
-        await dao.insert(id, testFile.type)
-      })
-
-      // TODO: afterEach delete the webhook
-    }
-
-    test(testDescription, async (t) => {
       const { type } = testFile
       const { httpServerPort } = context
 
@@ -56,11 +61,11 @@ exports.register = function ({ test, dir, webhook, context }) {
             .send(payload)
         }
 
-        if (testFile.expectError) {
+        if (expectError === true) {
           throw new Error('An error was expected in this request')
         }
       } catch (err) {
-        if (!testFile.expectError) {
+        if (expectError !== true) {
           throw err
         }
 
@@ -77,6 +82,28 @@ exports.register = function ({ test, dir, webhook, context }) {
       }
 
       t.snapshot(snapshot)
-    })
+
+      await webhookAfterEach(testFile, t)
+    } catch (err) {
+      if (webhook) {
+        await webhookAfterEach(testFile, t)
+      }
+    }
+  }
+}
+
+exports.register = function ({ test, dir, webhook, context }) {
+  const files = fs.readdirSync(dir)
+
+  files.forEach(file => {
+    const testFile = require(path.join(dir, file, 'test.js'))
+
+    let testDescription = `payload test "${file}"`
+
+    if (testFile.description) {
+      testDescription += ` - ${testFile.description}`
+    }
+
+    test(testDescription, buildTest({ testFile, context, dir, file, webhook }))
   })
 }

@@ -32,6 +32,14 @@ exports.insert = async function (id, type) {
   return daoHelper.insert({ id, type })
 }
 
+exports.deleteById = async function (id) {
+  return daoHelper.deleteById(id)
+}
+
+exports.findById = async function (id) {
+  return daoHelper.findById(id)
+}
+
 /**
 * Validate whether a webhook with a specific ID exists
 *
