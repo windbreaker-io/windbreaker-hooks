@@ -4,6 +4,7 @@ dist/
 coverage/
 .npm/
 .config/
+.v8flags*
 
 
 ### vim artifacts - https://github.com/github/gitignore/blob/master/Global/Vim.gitignore ###
