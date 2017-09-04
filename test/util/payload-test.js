@@ -14,6 +14,8 @@ async function webhookBeforeEach (testFile, t) {
 async function webhookAfterEach (testFile, t) {
   const { id } = t.context
 
+  console.log('IDDDD: ', id)
+
   try {
     await dao.deleteById(id)
   } catch (err) {
@@ -35,6 +37,8 @@ function buildTest ({ testFile, context, dir, file, webhook }) {
   const expectError = testFile.expectError
 
   return async (t) => {
+    let runAfterEach = false
+
     try {
       if (webhook) {
         await webhookBeforeEach(testFile, t)
@@ -82,11 +86,17 @@ function buildTest ({ testFile, context, dir, file, webhook }) {
 
       t.snapshot(snapshot)
 
-      await webhookAfterEach(testFile, t)
-    } catch (err) {
+      runAfterEach = true
+
       if (webhook) {
         await webhookAfterEach(testFile, t)
       }
+    } catch (err) {
+      if (webhook && !runAfterEach) {
+        await webhookAfterEach(testFile, t)
+      }
+
+      throw err
     }
   }
 }
