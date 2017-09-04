@@ -14,8 +14,6 @@ async function webhookBeforeEach (testFile, t) {
 async function webhookAfterEach (testFile, t) {
   const { id } = t.context
 
-  console.log('IDDDD: ', id)
-
   try {
     await dao.deleteById(id)
   } catch (err) {
