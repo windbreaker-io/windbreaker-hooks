@@ -19,7 +19,6 @@ async function webhookAfterEach (testFile, t) {
   } catch (err) {
     // If an error is expected, ignore if the delete fails
     if (testFile.expectError !== true) {
-      console.log('EXPECTED ERR THROW: ', testFile)
       throw err
     }
   }
