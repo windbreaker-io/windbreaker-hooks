@@ -1,4 +1,4 @@
-amqUrl: 'amqp://127.0.0.1:5672'
+amqUrl: 'amqp://rabbitmq'
 redisClusterNodes:
   - host: '127.0.0.1'
     port: 7000
@@ -7,7 +7,7 @@ redisClusterNodes:
 knex:
   client: 'pg'
   connection:
-    host: '127.0.0.1'
+    host: 'postgres'
     user: 'postgres'
     password: 'postgres'
     database: 'windbreaker'
