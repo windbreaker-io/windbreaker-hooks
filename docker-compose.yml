@@ -1,5 +1,27 @@
 version: '3'
 services:
+  windbreaker-hooks:
+    build: .
+    command: 'npm start'
+    depends_on:
+      - postgres
+      - rabbitmq
+    volumes:
+      - .:/usr/windbreaker-hooks
+      - /usr/windbreaker-hooks/node_modules
+    environment:
+      SERVICE_ENVIRONMENT: 'docker'
+  test:
+    build: .
+    command: 'npm run test:docker:ci'
+    depends_on:
+      - postgres
+      - rabbitmq
+    volumes:
+      - .:/usr/windbreaker-hooks
+      - /usr/windbreaker-hooks/node_modules
+    environment:
+      SERVICE_ENVIRONMENT: 'docker'
   postgres:
     image: 'postgres:9.6.3-alpine'
     environment:
@@ -7,13 +29,8 @@ services:
       POSTGRES_PASSWORD: 'postgres'
       POSTGRES_DB: 'windbreaker'
     ports:
-      - '5432:5432'
-  rediscluster:
-    image: 'grokzen/redis-cluster'
-    ports:
-      - "7000:7000"
-      - "7001:7001"
+      - 5432
   rabbitmq:
     image: 'rabbitmq:3.6.10-alpine'
     ports:
-      - '5672:5672'
+      - 5672
