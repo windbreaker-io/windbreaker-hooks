@@ -14,8 +14,6 @@ function verifyGithubSignature (ctx, request) {
   const expectedSignature = `sha1=${hmac.digest('hex')}`
   const actualSignature = request.headers[SIGNATURE_HEADER]
 
-  console.log('expected, actual', expectedSignature, actualSignature)
-
   // Avoid timing attacks
   if (!crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(actualSignature))) {
     throw new Error('github signature did not match expected')
