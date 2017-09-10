@@ -4,7 +4,6 @@ exports.type = 'GITHUB'
 
 exports.request = function ({ request, id, httpServerPort, endpoint, payload, signatureBuilder }) {
   const sig = signatureBuilder(payload)
-  console.log('signature', sig)
   return request
     .post(endpoint)
     .set('x-github-event', 'push')
