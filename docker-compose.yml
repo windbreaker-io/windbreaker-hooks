@@ -9,8 +9,12 @@ services:
     volumes:
       - .:/usr/windbreaker-hooks
       - /usr/windbreaker-hooks/node_modules
+      # uncomment to link and/or replace first path if service utils are located elsewhere
+      # - ../windbreaker-service-util:/usr/windbreaker-hooks/node_modules/windbreaker-service-util
     environment:
       SERVICE_ENVIRONMENT: 'docker'
+    ports:
+      - 8080
   test:
     build: .
     command: 'npm run test:docker:ci'
@@ -20,8 +24,10 @@ services:
     volumes:
       - .:/usr/windbreaker-hooks
       - /usr/windbreaker-hooks/node_modules
+      # uncomment to link and/or replace first path if service utils are located elsewhere
+      # - ../windbreaker-service-util:/usr/windbreaker-hooks/node_modules/windbreaker-service-util
     environment:
-      SERVICE_ENVIRONMENT: 'docker'
+      SERVICE_ENVIRONMENT: 'test'
   postgres:
     image: 'postgres:9.6.3-alpine'
     environment:

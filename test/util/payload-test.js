@@ -4,6 +4,7 @@ const request = require('superagent')
 const uuid = require('uuid')
 const dao = require('~/src/dao')
 const buildEndpoint = require('~/test/util/buildEndpoint')
+const getBuildSignatureFunc = require('~/test/util/getBuildSignatureFunc')
 
 async function webhookBeforeEach (testFile, t) {
   const id = uuid.v4()
@@ -50,12 +51,14 @@ function buildTest ({ testFile, context, dir, file, webhook }) {
         id = t.context.id
       }
 
-      const endpoint = buildEndpoint({ id, type, httpServerPort })
+      // TODO: use ID for future /:id hooks or remove all references entirely
+      const endpoint = buildEndpoint({ type, httpServerPort })
+      const signatureBuilder = getBuildSignatureFunc(type)
 
       let response
       try {
         if (testFile.request) {
-          response = await testFile.request({ request, id, httpServerPort, endpoint, payload })
+          response = await testFile.request({ request, id, httpServerPort, endpoint, payload, signatureBuilder })
         } else {
           response = await request
             .post(endpoint)

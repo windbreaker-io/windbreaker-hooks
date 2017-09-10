@@ -3,6 +3,7 @@ const config = require('~/src/config')
 
 config.load()
 
+console.log('config', config.clean())
 const environment = config.getEnvironment().name().toLowerCase()
 
 let exported = {}

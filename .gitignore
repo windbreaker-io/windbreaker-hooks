@@ -6,6 +6,9 @@ coverage/
 .config/
 .v8flags*
 
+# for storing windbreaker secrets - e.g. shared github hooks secrets
+.secrets/
+
 
 ### vim artifacts - https://github.com/github/gitignore/blob/master/Global/Vim.gitignore ###
 
