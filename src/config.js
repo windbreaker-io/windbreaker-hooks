@@ -15,10 +15,5 @@ function applyConfigOptions (configOps) {
 
 module.exports.load = async (configOps) => {
   if (configOps) applyConfigOptions(configOps)
-  await configUtil.load({ config, path: configDirectoryPath })
-}
-
-module.exports.loadSync = (configOps) => {
-  if (configOps) applyConfigOptions(configOps)
-  configUtil.loadSync({ config, path: configDirectoryPath })
+  configUtil.load({ config, path: configDirectoryPath })
 }

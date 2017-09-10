@@ -5,7 +5,7 @@ exports.start = async function (configOps) {
   const startupTasks = require('~/src/startup-tasks')
 
   try {
-    await config.load(configOps)
+    config.load(configOps)
     require('~/src/logging').logger(module)
 
     await startupTasks.startAll()

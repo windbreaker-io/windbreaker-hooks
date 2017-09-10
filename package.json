@@ -5,9 +5,10 @@
   "main": "src/run-server.js",
   "scripts": {
     "lint": "eslint .",
-    "migrate:local": "knex migrate:latest --env localhost --knexfile ./src/dao/knexfile.js",
+    "migrate:local": "knex migrate:latest --env $SERVICE_ENVIRONMENT --knexfile ./src/dao/knexfile.js",
     "docker:start": "docker-compose run windbreaker-hooks",
     "docker:stop": "docker-compose down",
+    "docker:rebuild:test": "docker-compose build --no-cache test",
     "pretest": "npm run lint",
     "test": "docker-compose run test",
     "posttest": "npm run docker:stop",
