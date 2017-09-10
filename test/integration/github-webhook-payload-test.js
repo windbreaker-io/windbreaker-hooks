@@ -1,5 +1,3 @@
-require('require-self-ref')
-
 const path = require('path')
 const test = require('ava')
 
