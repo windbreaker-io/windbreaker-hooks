@@ -1,7 +1,7 @@
 require('require-self-ref')
 const config = require('~/src/config')
 
-config.loadSync()
+config.load()
 
 const environment = config.getEnvironment().name().toLowerCase()
 
