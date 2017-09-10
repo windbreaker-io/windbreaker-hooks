@@ -2,6 +2,7 @@ const BaseConfig = require('windbreaker-service-util/models/BaseServiceConfig')
 const DefaultsMixin = require('fashion-model-defaults')
 const RedisClusterNodeConfig = require('windbreaker-service-util/models/cache/RedisClusterNodeConfig')
 const KnexConfig = require('windbreaker-service-util/models/dao/KnexConfig')
+const fs = require('fs')
 
 module.exports = BaseConfig.extend({
   mixins: [ DefaultsMixin ],
@@ -21,6 +22,13 @@ module.exports = BaseConfig.extend({
     webhookEventsQueueName: {
       description: 'The name of the queue in which webhook events are published on',
       default: 'events'
+    },
+    githubWebhookSecret: {
+      type: String,
+      description: 'path to file containing a shared secret for verifying github payloads',
+      default: function () {
+        return fs.readFileSync(require.resolve('~/.secrets/github-hooks-secret'), 'utf8')
+      }
     }
   }
 })

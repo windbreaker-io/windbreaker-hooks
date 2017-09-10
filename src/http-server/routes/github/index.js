@@ -1,43 +1,24 @@
 const GithubPush = require('windbreaker-service-util/models/events/webhook/github/GithubPush')
-const WebhookType = require('~/src/models/WebhookType')
-const dao = require('~/src/dao')
+const Installation = require('windbreaker-service-util/models/events/webhook/github/Installation')
 const logger = require('~/src/logging').logger(module)
 const producer = require('~/src/producer')
-const getWebhookMiddleware = require('~/src/http-server/util/getWebhookMiddleware')
+const getWebhookMiddleware = require('~/src/http-server/util/github/getWebhookMiddleware')
 
 const eventToModelType = {
-  push: GithubPush
+  push: GithubPush,
+  installation: Installation
 }
 
 const EVENT_HEADER = 'x-github-event'
 
-async function _isValidWebhook (id) {
-  try {
-    let result = await dao.isValidWebhook(id, WebhookType.GITHUB)
-    return result
-  } catch (err) {
-    logger.error(`Error validating webhook with id "${id}"`)
-    return false
-  }
-}
-
 module.exports = {
   method: 'POST',
-  path: '/github/:id',
+  path: '/github',
   middleware: getWebhookMiddleware(),
   async handler (ctx) {
-    const id = ctx.params.id
-
-    let isValidWebhook = await _isValidWebhook(id)
-
-    if (!isValidWebhook) {
-      logger.error(`Invalid webhook id "${id}" received in request`)
-      ctx.throw(400, `Invalid webhook id "${id}" received in request`)
-    }
-
     const event = ctx.request.header[EVENT_HEADER]
 
-    logger.info(`Received GitHub event "${event}" with ID ${id}`)
+    logger.info(`Received GitHub event "${event}"`)
 
     if (!event) {
       logger.error('Missing event header in GitHub webhook')
