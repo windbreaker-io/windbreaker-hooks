@@ -12,3 +12,5 @@ knex:
     password: 'postgres'
     database: 'windbreaker'
   debug: true
+  migrations:
+    tableName: 'migrations'
