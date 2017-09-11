@@ -27,7 +27,11 @@ module.exports = BaseConfig.extend({
       type: String,
       description: 'path to file containing a shared secret for verifying github payloads',
       default: function () {
-        return fs.readFileSync(require.resolve('~/.secrets/github-hooks-secret'), 'utf8')
+        let path
+        try {
+          path = require.resolve('~/.secrets/github-hooks-secret')
+        } catch (err) {}
+        return path ? fs.readFileSync(path, 'utf8').trim() : 'superSecret'
       }
     }
   }
