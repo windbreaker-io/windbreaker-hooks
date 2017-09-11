@@ -14,7 +14,7 @@ services:
     environment:
       SERVICE_ENVIRONMENT: 'docker'
     ports:
-      - 8080
+      - 8080:8080
   test:
     build: .
     command: 'npm run test:docker:ci'
@@ -27,7 +27,7 @@ services:
       # uncomment to link and/or replace first path if service utils are located elsewhere
       # - ../windbreaker-service-util:/usr/windbreaker-hooks/node_modules/windbreaker-service-util
     environment:
-      SERVICE_ENVIRONMENT: 'test'
+      SERVICE_ENVIRONMENT: 'docker'
   postgres:
     image: 'postgres:9.6.3-alpine'
     environment:
