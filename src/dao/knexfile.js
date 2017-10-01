@@ -6,10 +6,6 @@ config.load()
 const environment = config.getEnvironment().name().toLowerCase()
 
 let exported = {}
-exported[environment] = Object.assign(config.getKnex().clean(), {
-  migrations: {
-    tableName: config.getWebhookMigrationsTableName()
-  }
-})
+exported[environment] = config.getKnex().clean()
 
 module.exports = exported

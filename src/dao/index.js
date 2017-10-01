@@ -18,7 +18,7 @@ exports.createDao = function () {
 exports.migrate = async function () {
   logger.info('Attempting to run database migrations...')
   return daoHelper.getKnex().migrate.latest({
-    tableName: config.getWebhookMigrationsTableName(),
+    tableName: config.getKnex().data.migrations.tableName,
     directory: path.join(__dirname, 'migrations')
   })
 }
