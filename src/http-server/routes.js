@@ -10,18 +10,8 @@ exports.register = function (app, router) {
     let { middleware, method, path, handler } = route
 
     logger.info('Registering route: ', method, path)
-    method = method.toLowerCase()
 
-    // TODO: Add middleware for calculating request time
-
-    if (middleware) {
-      router[method](path, ...middleware, handler)
-    } else {
-      router[method](path, handler)
-    }
-
-    // TODO: Add back koa-path-router
-    // method = method.toUpperCase()
-    // router.register({ path, method, middleware, handler })
+    method = method.toUpperCase()
+    router.register({ path, method, middleware, handler })
   })
 }

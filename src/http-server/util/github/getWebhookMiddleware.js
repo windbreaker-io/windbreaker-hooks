@@ -2,7 +2,7 @@ require('require-self-ref')
 
 const config = require('~/src/config')
 const logger = require('~/src/logging').logger(module)
-const koaBody = require('koa-body')()
+const koaBody = require('koa-bodyparser')()
 const crypto = require('crypto')
 
 const SHARED_SECRET = config.getGithubWebhookSecret()
