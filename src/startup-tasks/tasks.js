@@ -3,4 +3,5 @@ module.exports = [
   // 'task-connect-to-redis',
   'task-connect-to-db',
   'task-configure-http-server'
+  // 'task-validate-config'
 ]

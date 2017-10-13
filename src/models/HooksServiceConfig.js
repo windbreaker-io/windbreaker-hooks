@@ -23,15 +23,19 @@ module.exports = BaseConfig.extend({
       description: 'The name of the queue in which webhook events are published on',
       default: 'events'
     },
-    githubWebhookSecret: {
+    githubWebhookSecretPath: {
       type: String,
       description: 'path to file containing a shared secret for verifying github payloads',
       default: function () {
-        let path
-        try {
-          path = require.resolve('~/.secrets/github-hooks-secret')
-        } catch (err) {}
-        return path ? fs.readFileSync(path, 'utf8').trim() : 'superSecret'
+        throw new Error('path to github webhook secret key must be provided!')
+      }
+    },
+    githubWebhookSecret: {
+      type: String,
+      description: 'shared secret for verifying github payloads',
+      default: function () {
+        const path = require.resolve(this.getGithubWebhookSecretPath())
+        return fs.readFileSync(path, 'utf-8')
       }
     }
   }
