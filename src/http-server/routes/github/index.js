@@ -2,7 +2,7 @@ const GithubPush = require('windbreaker-service-util/models/events/webhook/githu
 const Installation = require('windbreaker-service-util/models/events/webhook/github/Installation')
 const logger = require('~/src/logging').logger(module)
 const producer = require('~/src/producer')
-const getWebhookMiddleware = require('~/src/http-server/util/github/getWebhookMiddleware')
+const githubMiddleware = require('./middleware')
 
 const eventToModelType = {
   push: GithubPush,
@@ -14,7 +14,7 @@ const EVENT_HEADER = 'x-github-event'
 module.exports = {
   method: 'POST',
   path: '/github',
-  middleware: getWebhookMiddleware(),
+  middleware: githubMiddleware,
   async handler (ctx) {
     const event = ctx.request.header[EVENT_HEADER]
 

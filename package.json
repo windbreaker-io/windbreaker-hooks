@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "migrate:local": "knex migrate:latest --env $SERVICE_ENVIRONMENT --knexfile ./src/dao/knexfile.js",
-    "docker:start": "docker-compose up windbreaker-hooks",
+    "docker:start": "docker-compose run windbreaker-hooks",
     "docker:stop": "docker-compose down",
     "docker:rebuild:test": "docker-compose build --no-cache test",
     "pretest": "npm run lint",
@@ -14,7 +14,7 @@
     "posttest": "npm run docker:stop",
     "test:unit": "nyc ava test/unit",
     "test:integration": "docker-compose run test && npm run migrate:local && nyc ava test/integration; npm run docker:stop",
-    "test:docker:ci": "npm run migrate:local && nyc ava test/unit test/integration/*-test.js --verbose",
+    "test:docker:ci": "npm run migrate:local && ava test/unit test/integration/*-test.js --verbose",
     "start": "browser-refresh src/run-server.js",
     "cluster:start": "browser-refresh src/cluster.js"
   },
