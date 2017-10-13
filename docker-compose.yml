@@ -25,7 +25,7 @@ services:
       - .:/usr/windbreaker-hooks
       - /usr/windbreaker-hooks/node_modules
       # uncomment to link and/or replace first path if service utils are located elsewhere
-      - ../windbreaker-service-util:/usr/windbreaker-hooks/node_modules/windbreaker-service-util
+      # - ../windbreaker-service-util:/usr/windbreaker-hooks/node_modules/windbreaker-service-util
     environment:
       SERVICE_ENVIRONMENT: 'test'
   postgres:

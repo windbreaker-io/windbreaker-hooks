@@ -4,7 +4,7 @@ exports.description = 'should receive 401 error when requesting with an invalid 
 exports.expectError = true
 const type = exports.type = 'GITHUB'
 
-exports.request = function ({ request, id, httpServerPort, endpoint, payload, signatureBuilder }) {
+exports.request = function ({ request, id, httpServerPort, endpoint, payload }) {
   return request
     .post(buildEndpoint({ type, httpServerPort }))
     .set('x-hub-signature', 'sha1=badSignature')

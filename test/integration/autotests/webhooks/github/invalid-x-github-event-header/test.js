@@ -1,11 +1,13 @@
+const generateSignature = require('~/test/util/generateSignature')
+
 exports.description = 'should receive 400 error for requesting with an invalid x-github-event'
 exports.type = 'GITHUB'
 exports.expectError = true
 
-exports.request = function ({ request, id, httpServerPort, endpoint, payload, signatureBuilder }) {
+exports.request = function ({ request, id, httpServerPort, endpoint, payload }) {
   return request
     .post(endpoint)
     .set('x-github-event', 'INVALID')
-    .set('x-hub-signature', signatureBuilder(payload))
+    .set('x-hub-signature', generateSignature(payload))
     .send(payload)
 }
