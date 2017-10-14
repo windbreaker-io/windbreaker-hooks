@@ -31,16 +31,16 @@
     ]
   },
   "dependencies": {
-    "fashion-model-defaults": "^1.0.2",
-    "js-yaml": "^3.9.1",
+    "fashion-model-defaults": "^1.1.0",
+    "js-yaml": "^3.10.0",
     "knex": "^0.13.0",
     "koa": "^2.3.0",
-    "koa-body": "^2.3.0",
+    "koa-body": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-path-router": "^0.1.1",
     "koa-router": "^7.2.1",
     "n-level-cache": "^1.0.3",
-    "queue": "^4.4.0",
+    "queue": "^4.4.1",
     "require-self-ref": "^2.0.1",
     "task-list": "^1.0.6",
     "uuid": "^3.1.0",
@@ -50,17 +50,17 @@
     "ava": "^0.20.0",
     "branch-name-commit-modifier": "^2.0.1",
     "browser-refresh": "^1.6.0",
-    "eslint": "^4.6.1",
+    "eslint": "^4.9.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.3.0",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
     "get-port-sync": "^1.0.0",
     "git-hooks": "^1.1.8",
     "nyc": "^11.2.1",
     "porti": "^1.0.4",
     "sinon": "^2.4.1",
-    "superagent": "^3.5.2"
+    "superagent": "^3.6.3"
   }
 }
