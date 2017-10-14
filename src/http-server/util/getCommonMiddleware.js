@@ -1,5 +1,9 @@
 const koaBody = require('koa-body')()
 
+/**
+ * Common middleware that should run before any route handler
+ */
+
 module.exports = function () {
   return [
     koaBody,

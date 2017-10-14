@@ -15,7 +15,7 @@ exports.register = function (app, router) {
     // TODO: Add middleware for calculating request time
 
     if (middleware) {
-      router[method](path, ...middleware, handler)
+      router[method](path, middleware, handler)
     } else {
       router[method](path, handler)
     }

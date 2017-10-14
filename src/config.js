@@ -13,7 +13,7 @@ function applyConfigOptions (configOps) {
   }
 }
 
-module.exports.load = async (configOps) => {
+module.exports.load = (configOps) => {
   if (configOps) applyConfigOptions(configOps)
   configUtil.load({ config, path: configDirectoryPath })
 }

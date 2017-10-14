@@ -10,7 +10,11 @@ knex:
     host: 'postgres'
     user: 'postgres'
     password: 'postgres'
-    database: 'windbreaker-hooks'
+    database: 'windbreaker_hooks'
   debug: true
   migrations:
     tableName: 'migrations'
+
+# Path to github hook secret key, relative to project root (not home)
+# Absolute paths work as well
+githubWebhookSecretPath: '~/test/util/fake-github-hooks-secret'

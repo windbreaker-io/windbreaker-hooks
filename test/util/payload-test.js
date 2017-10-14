@@ -50,7 +50,8 @@ function buildTest ({ testFile, context, dir, file, webhook }) {
         id = t.context.id
       }
 
-      const endpoint = buildEndpoint({ id, type, httpServerPort })
+      // TODO: use ID for future /:id hooks or remove all references entirely
+      const endpoint = buildEndpoint({ type, httpServerPort })
 
       let response
       try {

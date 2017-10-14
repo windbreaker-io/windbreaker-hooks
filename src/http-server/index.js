@@ -1,6 +1,7 @@
 const Koa = require('koa')
 // const Router = require('koa-path-router')
 const router = require('koa-router')()
+const getCommonMiddleware = require('~/src/http-server/util/getCommonMiddleware')
 
 let server
 
@@ -20,6 +21,8 @@ exports.create = function () {
   // routes.register(app, router)
   //
   // app.use(router.getRequestHandler())
+
+  getCommonMiddleware().forEach((middleware) => app.use(middleware))
 
   routes.register(app, router)
 
