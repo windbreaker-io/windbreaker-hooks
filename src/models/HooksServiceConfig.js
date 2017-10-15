@@ -35,7 +35,7 @@ module.exports = BaseConfig.extend({
       description: 'shared secret for verifying github payloads',
       default: function () {
         const path = require.resolve(this.getGithubWebhookSecretPath())
-        return fs.readFileSync(path, 'utf-8')
+        return fs.readFileSync(path, 'utf-8').trim()
       }
     }
   }
