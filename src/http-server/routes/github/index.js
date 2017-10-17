@@ -14,7 +14,7 @@ const EVENT_HEADER = 'x-github-event'
 module.exports = {
   method: 'POST',
   path: '/github',
-  middleware: githubMiddleware,
+  middleware: [ githubMiddleware ],
   async handler (ctx) {
     const event = ctx.request.header[EVENT_HEADER]
 
@@ -33,7 +33,7 @@ module.exports = {
     }
 
     let errors = []
-    let webhookEvent = ModelType.wrap(ctx.body, errors)
+    let webhookEvent = ModelType.wrap(ctx.request.body, errors)
 
     if (errors.length) {
       logger.error(`Invalid event body "${webhookEvent.stringify()}". Errors: "${errors.join(',')}"`)
