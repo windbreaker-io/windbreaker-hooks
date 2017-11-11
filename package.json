@@ -42,7 +42,7 @@
     "windbreaker-service-util": "github:windbreaker-io/windbreaker-service-util"
   },
   "devDependencies": {
-    "ava": "^0.20.0",
+    "ava": "^0.23.0",
     "branch-name-commit-modifier": "^2.0.1",
     "browser-refresh": "^1.6.0",
     "eslint": "^4.9.0",
