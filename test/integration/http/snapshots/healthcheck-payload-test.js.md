@@ -1,4 +1,4 @@
-# Snapshot report for `test/integration/healthcheck-payload-test.js`
+# Snapshot report for `test/integration/http/healthcheck-payload-test.js`
 
 The actual snapshot is saved in `healthcheck-payload-test.js.snap`.
 
